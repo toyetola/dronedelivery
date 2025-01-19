@@ -44,7 +44,7 @@ class DispatchController {
             }
             return res.status(200).json(response);
         } catch (error : any) {
-            console.error(`UserController=>getAllFreeDrones ${error}`)
+            console.error(`DispatchController=>loadDroneWithMedications ${error}`)
             if (error instanceof z.ZodError) {
                 const response: BaseResponse<any> = {
                     status: 'error',
@@ -70,7 +70,7 @@ class DispatchController {
             }
             return res.status(200).json(response);
         } catch (error) {
-            console.error(`UserController=>getAllFreeDrones ${error}`)
+            console.error(`DispatchController=>fetchLoadedDroneLogs ${error}`)
             const response: BaseResponse<null> = {
               status: 'error',
               data: null,
@@ -85,12 +85,12 @@ class DispatchController {
             const loadLogId = req.params.id;
             const updatedDrone = await DispatchService.updateLoadedDroneStatus(loadLogId, req.body);
             const response: BaseResponse<Drone> = {
-            status: 'success',
-            data: updatedDrone,
+                status: 'success',
+                data: updatedDrone,
             }
             return res.status(200).json(response);
         } catch (error: any) {
-            console.error(`UserController=>getDroneById ${error}`)
+            console.error(`DispatchController=>updateLoadedDroneStatus ${error}`)
             const response: BaseResponse<null> = {
                 status: 'error',
                 data: null,
@@ -98,6 +98,27 @@ class DispatchController {
             }
             return res.status(500).json(response);
         }
+    }
+
+    public async checkDroneBatteryLevel(req: Request, res: Response) {
+
+        try {
+            const batteryLevel = await DispatchService.checkDroneBatteryLevel(req.params.droneId);
+            const response: BaseResponse<any> = {
+                status: 'success',
+                data: {batteryLevel},
+            }
+            return res.status(200).json(response);
+        } catch (error) {
+            console.error(`DispatchController=>getDroneById ${error}`)
+            const response: BaseResponse<null> = {
+                status: 'error',
+                data: null,
+                message: `Drone could not be fetched, please try again: ${error?.message}`,
+            }
+            return res.status(500).json(response);
+        }
+        
     }
   
   }

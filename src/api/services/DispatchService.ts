@@ -98,7 +98,7 @@ class DispatchService {
                 }
             }else if(updateRequestBody.status === DroneState.RETURNING){
                 if(loadLog.status !== DroneState.DELIVERED){
-                    throw new Error(`Drone items not delivered`)
+                    throw new Error(`Drone items not delivered yet`)
                 }
             }else if(updateRequestBody.status === DroneState.LOADED){
                 if(loadLog.status !== DroneState.LOADING){
@@ -119,6 +119,18 @@ class DispatchService {
             console.error(`DispatchService=>updateLoadedDroneStatus ${error}`)
             throw new Error(`${error.message}`)
         }
+    }
+
+    checkDroneBatteryLevel = async (droneId: string) => {
+        
+        try {
+            const drone = await Drone.findById(droneId);
+            return drone?.batteryCapacity;
+        } catch (error: any) {
+            console.error(`DispatchService=>checkDroneBatteryLevel ${error}`)
+            throw new Error(`${error.message}`)
+        }
+        
     }
 }
 
