@@ -12,7 +12,7 @@ interface DroneDocument extends Document {
     model: DroneModel;
 }
 
-const DroneSchema =  new Schema<DroneDocument>({
+const DroneSchema : Schema =  new Schema<DroneDocument>({
     serialNumber : {
         type : String,
         required: true,
@@ -47,7 +47,7 @@ const DroneSchema =  new Schema<DroneDocument>({
     }
 }, {timestamps : true})
 
-const Drone = mongoose.model("Drone", DroneSchema)
+const Drone : Model<DroneDocument> = mongoose.model<DroneDocument>("Drone", DroneSchema)
 DroneSchema.set('toJSON', {
     transform: (_, ret) => {
       ret.id = ret._id.toString();

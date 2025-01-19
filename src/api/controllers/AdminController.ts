@@ -11,7 +11,7 @@ class AdminController {
 
         try {
             const validatedDroneObject : DroneRequest = DroneRegistrationSchema.parse(req.body)
-            const registeredDrone = AdminService.registerDrone(validatedDroneObject)
+            const registeredDrone = await AdminService.registerDrone(validatedDroneObject)
             return res.status(201).json(registeredDrone);
         } catch (error) {
             console.error(`Error registering device ${error}`)
