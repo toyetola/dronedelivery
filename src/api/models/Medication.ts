@@ -23,5 +23,5 @@ const MedicationSchema =  new Schema({
     }
 }, {timestamps : true})
 
-const Medication = mongoose.model("Order", MedicationSchema)
+const Medication = mongoose.model("Medication", MedicationSchema)
 export default Medication;
