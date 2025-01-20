@@ -54,7 +54,7 @@ class DispatchService {
                 await drone.save();
                 return loadLog;
             }else if(drone && !loadLog){
-                
+                console.log('Creating new load log')
                 interface LoadLogInterface extends LoadDroneRequest {
                     medications: Medication[]
                 }
@@ -63,9 +63,11 @@ class DispatchService {
                     medications : [loadDroneRequest.medication],
                     status : DroneState.LOADING
                 }
+                console.log('About to create log')
                 const medicationLoaded = await LoadLog.create(loadDroneRequestWithMedications)
                 drone.state = DroneState.LOADING;
                 await drone.save();
+                console.log(`Medication loaded ${medicationLoaded}`)
                 return medicationLoaded;
             }
 
@@ -114,7 +116,7 @@ class DispatchService {
             loadLog.status = updateRequestBody.status;
             await loadLog.save();
             if(updateRequestBody.status === DroneState.LOADED) {
-                Drone.updateOne({ _id: loadLog.droneId }, { state: updateRequestBody.status, lastTimeOfTakeOff: Date.now, batteryStatus : BatteryState.NOTCHARGING }).exec();
+                Drone.updateOne({ _id: loadLog.droneId }, { state: updateRequestBody.status, lastTimeOfTakeOff: new Date(), batteryStatus : BatteryState.NOTCHARGING }).exec();
             }else{
                 Drone.updateOne({ _id: loadLog.droneId }, { state: updateRequestBody.status }).exec();
             }

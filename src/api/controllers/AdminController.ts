@@ -24,6 +24,17 @@ class AdminController {
             throw new Error(`Cannot register drone`)
         }
     }
+
+    chargeDrone = async (req: Request, res: Response) => {
+        try {
+            const droneId = req.params.droneId
+            const chargingDrone = await AdminService.chargeDrone(droneId)
+            return res.status(200).json(chargingDrone)
+        } catch (error) {
+            console.error(`AdminController => chargeDrone ${error}`)
+            throw new Error(`Cannot charge drone`)
+        }
+    }
 }
 
 export default new AdminController();

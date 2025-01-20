@@ -6,6 +6,8 @@ import { LoadDroneRequest } from "../interfaces/LoadDroneRequest";
 import DispatchService from "../services/DispatchService";
 import z from 'zod';
 import { LoadLogDto } from '../interfaces/LoadLogDto';
+import { DroneModel } from '../Enums/DroneModel';
+import { DroneDto } from '../interfaces/DroneDto';
 
 
 class DispatchController {
@@ -38,7 +40,7 @@ class DispatchController {
             }
 
             const addedLoad = await DispatchService.loadDrone(validateDroneLoadingObject);
-            const response: BaseResponse<LoadLog> = {
+            const response: BaseResponse<LoadLogDto | null> = {
               status: 'success',
               data: addedLoad,
             }
@@ -84,7 +86,7 @@ class DispatchController {
         try {
             const loadLogId = req.params.id;
             const updatedDrone = await DispatchService.updateLoadedDroneStatus(loadLogId, req.body);
-            const response: BaseResponse<Drone> = {
+            const response: BaseResponse<LoadLogDto> = {
                 status: 'success',
                 data: updatedDrone,
             }
@@ -109,7 +111,7 @@ class DispatchController {
                 data: {batteryLevel},
             }
             return res.status(200).json(response);
-        } catch (error) {
+        } catch (error : any) {
             console.error(`DispatchController=>getDroneById ${error}`)
             const response: BaseResponse<null> = {
                 status: 'error',

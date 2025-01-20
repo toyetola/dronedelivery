@@ -16,7 +16,7 @@ const LoadLogSchema =  new Schema({
     status:{
         type: String,
         enum: {
-            values: [DroneState.LOADED, DroneState.LOADING, DroneState.OFFLOADED],
+            values: [DroneState.LOADED, DroneState.LOADING, DroneState.OFFLOADED, DroneState.RETURNING, DroneState.DELIVERED, DroneState.DELIVERING, DroneState.IDLE],
             default: DroneState.LOADING,
             message: "{VALUE} not a valid state"
         },
@@ -24,7 +24,7 @@ const LoadLogSchema =  new Schema({
     }
 }, {timestamps : true})
 
-const LoadLog  = mongoose.model("LoadLoag", LoadLogSchema)
+const LoadLog  = mongoose.model("LoadLog", LoadLogSchema)
 LoadLogSchema.set('toJSON', {
     transform: (_, ret) => {
       ret.id = ret._id.toString();

@@ -5,6 +5,8 @@ import bodyParser from 'body-parser';
 import { config } from './config/index';
 import AdminRoute from './api/routes/AdminRoute'
 import UserRoute from './api/routes/UserRoute'
+import './api/jobs/CronJob';
+import './api/seeds/InitialDataSeed';
 
 const app = express();
 const PORT = 3000;

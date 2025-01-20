@@ -3,7 +3,7 @@ import { DroneState } from "../Enums/DroneState";
 
 interface DroneRequest {
     name : string,
-    model: DroneModel,
+    droneModel: DroneModel,
     weightLimit : number,
     batteryCapacity : number,
     state?: DroneState,

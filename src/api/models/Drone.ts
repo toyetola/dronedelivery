@@ -1,9 +1,8 @@
-import mongoose, { Document, Schema, Model } from "mongoose";
+import mongoose from "mongoose";
+import { Schema, Model, Document } from 'mongoose';
 import { DroneModel } from '../Enums/DroneModel'
 import { DroneState } from "../Enums/DroneState";
-import e from "express";
 import { BatteryState } from "../Enums/BatteryState";
-const Schema = mongoose.Schema;
 
 interface DroneDocument extends Document {
     name: string;
@@ -11,9 +10,10 @@ interface DroneDocument extends Document {
     weightLimit: number;
     batteryCapacity: number;
     serialNumber: string;
-    model: DroneModel;
+    droneModel: DroneModel;
     batteryStatus: BatteryState;
     lastTimeOfTakeOff: Date;
+    startChargeTime: Date;
 }
 
 const DroneSchema : Schema =  new Schema<DroneDocument>({
@@ -22,7 +22,7 @@ const DroneSchema : Schema =  new Schema<DroneDocument>({
         required: true,
         unique: true
     },
-    model: {
+    droneModel: {
         type : String,
         required : true,
         enum : {
@@ -57,8 +57,10 @@ const DroneSchema : Schema =  new Schema<DroneDocument>({
         }
     },
     lastTimeOfTakeOff: {
-        type: Date,
-        default: Date.now
+        type: Date
+    },
+    startChargeTime : {
+        type: Date
     }
 }, {timestamps : true})
 

@@ -1,6 +1,6 @@
 export interface DroneDto {
     name : string,
-    model: string,
+    droneModel: string,
     weightLimit : number,
     batteryCapacity : number,
     state?: any,
