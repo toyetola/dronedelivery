@@ -1,6 +1,8 @@
-import mongoose, { Document, Schema, Model, model } from "mongoose";
+import mongoose, { Document, Schema, Model } from "mongoose";
 import { DroneModel } from '../Enums/DroneModel'
 import { DroneState } from "../Enums/DroneState";
+import e from "express";
+import { BatteryState } from "../Enums/BatteryState";
 const Schema = mongoose.Schema;
 
 interface DroneDocument extends Document {
@@ -10,6 +12,8 @@ interface DroneDocument extends Document {
     batteryCapacity: number;
     serialNumber: string;
     model: DroneModel;
+    batteryStatus: BatteryState;
+    lastTimeOfTakeOff: Date;
 }
 
 const DroneSchema : Schema =  new Schema<DroneDocument>({
@@ -44,12 +48,23 @@ const DroneSchema : Schema =  new Schema<DroneDocument>({
             message: "{VALUE} not a valid state"
         },
         required: true
+    },
+    batteryStatus: {
+        type: String,
+        enum: {
+            values: [BatteryState.CHARGING, BatteryState.NOTCHARGING],
+            message: "{VALUE} not a valid state"
+        }
+    },
+    lastTimeOfTakeOff: {
+        type: Date,
+        default: Date.now
     }
 }, {timestamps : true})
 
 const Drone : Model<DroneDocument> = mongoose.model<DroneDocument>("Drone", DroneSchema)
 DroneSchema.set('toJSON', {
-    transform: (_, ret) => {
+    transform: (_:any, ret:any) => {
       ret.id = ret._id.toString();
       delete ret._id
       delete ret.__v;

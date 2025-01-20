@@ -1,3 +1,4 @@
+import { BatteryState } from "../Enums/BatteryState";
 import { DroneState } from "../Enums/DroneState";
 import { LoadDroneRequest } from "../interfaces/LoadDroneRequest";
 import { Medication } from "../interfaces/Medication";
@@ -112,7 +113,12 @@ class DispatchService {
             
             loadLog.status = updateRequestBody.status;
             await loadLog.save();
-            Drone.updateOne({ _id: loadLog.droneId }, { state: updateRequestBody.status }).exec();
+            if(updateRequestBody.status === DroneState.LOADED) {
+                Drone.updateOne({ _id: loadLog.droneId }, { state: updateRequestBody.status, lastTimeOfTakeOff: Date.now, batteryStatus : BatteryState.NOTCHARGING }).exec();
+            }else{
+                Drone.updateOne({ _id: loadLog.droneId }, { state: updateRequestBody.status }).exec();
+            }
+            
             return loadLog;
             
         } catch (error: any) {
