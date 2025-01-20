@@ -6,6 +6,7 @@
   "scripts": {
     "test": "jest",
     "build": "npx tsc",
+    "start": "node dist/server.js",
     "dev": "npx tsx watch src/server.ts"
   },
   "keywords": [],

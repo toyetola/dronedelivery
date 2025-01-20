@@ -13,7 +13,7 @@ import { DroneDto } from '../interfaces/DroneDto';
 class DispatchController {
 
     // load drone
-    public async loadDroneWithMedications(req: Request, res: Response)  {
+    public async loadDroneWithMedications(req: Request, res: Response) : Promise<any> {
         try {
             //drone validation
             const validateDroneLoadingObject : LoadDroneRequest = LoadMedicationSchema.parse(req.body);
@@ -63,7 +63,7 @@ class DispatchController {
         }
     }
 
-    public async fetchLoadedDroneLogs(req: Request, res: Response) {
+    public async fetchLoadedDroneLogs(req: Request, res: Response) : Promise<any>{
         try {
             const loadedDroneLogs = await DispatchService.fetchLoadedDroneLogs(req.params.droneId);
             const response: BaseResponse<LoadLogDto[]> = {
@@ -82,7 +82,7 @@ class DispatchController {
         }
     }
   
-    public async updateLoadedDroneStatus(req: Request, res: Response) {
+    public async updateLoadedDroneStatus(req: Request, res: Response) : Promise<any> {
         try {
             const loadLogId = req.params.id;
             const updatedDrone = await DispatchService.updateLoadedDroneStatus(loadLogId, req.body);
@@ -102,7 +102,7 @@ class DispatchController {
         }
     }
 
-    public async checkDroneBatteryLevel(req: Request, res: Response) {
+    public async checkDroneBatteryLevel(req: Request, res: Response) : Promise<any> {
 
         try {
             const batteryLevel = await DispatchService.checkDroneBatteryLevel(req.params.droneId);

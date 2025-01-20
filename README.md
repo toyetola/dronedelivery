@@ -103,6 +103,18 @@ Running Tests
 npm test
 ```
 
+### Running in a container
+1. Run
+
+    ```
+    docker-compose build
+    ```
+    
+2. Run
+    ```
+    docker-compose up
+    ```
+
 There is a config file in ```config.index.ts``` where you can set you database uri and application port as well.
 
 This file also provided configurations we can use to run schedule jobs to determine battery drop rate and subsequently update battery levels.
