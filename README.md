@@ -35,20 +35,24 @@ The Drone Medication Delivery App API is designed to manage and monitor the deli
   - **Method:** POST
   - **Description:** Loads medications onto a drone.
 
-- **Get drone logs**
+- **Get every instance when a drone has been loaded**
   - **Endpoint:** `/drone/678ced16a3576047b1d5fd2f/logs`
   - **Method:** GET
-  - **Description:** Retrieves logs for a specific drone.
+  - **Description:** Retrieves loaded logs (i.e. each time it has been loaded with items and the items themsleves) for a specific drone.
 
 - **Update load log status**
   - **Endpoint:** `/loadLog/status/update/678d36c3bebd92e3d9259805`
   - **Method:** PUT
-  - **Description:** Updates the status of a load log.
+  - **Description:** Updates the status of a loaded drone to DELIVERING, DELIVERED, RETRUNING etc..
 
 - **Check drone battery level**
   - **Endpoint:** `/drone/678ced16a3576047b1d5fd2f/battery/check`
   - **Method:** GET
   - **Description:** Checks the battery level of a specific drone.
+
+- **Schedule for battery drain or gain update**
+    - A scheduled job run based on some configurations in the config/index.ts file which reduces battery levels
+    - You can get the logs the document db we are running
 
 ## Getting Started
 
@@ -115,3 +119,6 @@ Authentication middlewares can be created to authenticate and authorize differen
 
 ## Needed Data
 Some drone data will already be seeded for you once the database connection is extablished.
+
+## Tests
+Run ```npm test``` 22 tests in 3 suites should pass 
