@@ -7,7 +7,7 @@ import { z } from 'zod'
 class AdminController {
 
 
-    registerDrone  = async (req: Request, res: Response) => {
+    static async registerDrone (req: Request, res: Response) : Promise<any> {
 
         try {
             const validatedDroneObject : DroneRequest = DroneRegistrationSchema.parse(req.body)
@@ -24,6 +24,17 @@ class AdminController {
             throw new Error(`Cannot register drone`)
         }
     }
+
+    static async chargeDrone (req: Request, res: Response) : Promise<any> {
+        try {
+            const droneId = req.params.droneId
+            const chargingDrone = await AdminService.chargeDrone(droneId)
+            return res.status(200).json(chargingDrone)
+        } catch (error) {
+            console.error(`AdminController => chargeDrone ${error}`)
+            throw new Error(`Cannot charge drone`)
+        }
+    }
 }
 
-export default new AdminController();
+export default AdminController;

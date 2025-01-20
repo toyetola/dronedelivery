@@ -6,7 +6,7 @@ import { DroneDto } from '../interfaces/DroneDto';
 class UserController {
 
   // Get all users<BaseResponse<Drone[]>>
-  public async getAllFreeDrones(req: Request, res: Response)  {
+  public async getAllFreeDrones(req: Request, res: Response) : Promise<any>  {
       try {
           console.info(`Fetching...`)
           const drones =  await DispatchService.getAllFreeDrones();
@@ -27,7 +27,7 @@ class UserController {
   }
 
   // Get drone by ID
-  public async getDroneById(req: Request, res: Response) {
+  public async getDroneById(req: Request, res: Response) : Promise<any> {
     try {
       const drone = await DispatchService.getDroneById(req.params.id);
       const response: BaseResponse<DroneDto | null> = {

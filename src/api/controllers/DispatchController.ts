@@ -6,12 +6,14 @@ import { LoadDroneRequest } from "../interfaces/LoadDroneRequest";
 import DispatchService from "../services/DispatchService";
 import z from 'zod';
 import { LoadLogDto } from '../interfaces/LoadLogDto';
+import { DroneModel } from '../Enums/DroneModel';
+import { DroneDto } from '../interfaces/DroneDto';
 
 
 class DispatchController {
 
     // load drone
-    public async loadDroneWithMedications(req: Request, res: Response)  {
+    public async loadDroneWithMedications(req: Request, res: Response) : Promise<any> {
         try {
             //drone validation
             const validateDroneLoadingObject : LoadDroneRequest = LoadMedicationSchema.parse(req.body);
@@ -38,13 +40,13 @@ class DispatchController {
             }
 
             const addedLoad = await DispatchService.loadDrone(validateDroneLoadingObject);
-            const response: BaseResponse<LoadLog> = {
+            const response: BaseResponse<LoadLogDto | null> = {
               status: 'success',
               data: addedLoad,
             }
             return res.status(200).json(response);
         } catch (error : any) {
-            console.error(`UserController=>getAllFreeDrones ${error}`)
+            console.error(`DispatchController=>loadDroneWithMedications ${error}`)
             if (error instanceof z.ZodError) {
                 const response: BaseResponse<any> = {
                     status: 'error',
@@ -61,7 +63,7 @@ class DispatchController {
         }
     }
 
-    public async fetchLoadedDroneLogs(req: Request, res: Response) {
+    public async fetchLoadedDroneLogs(req: Request, res: Response) : Promise<any>{
         try {
             const loadedDroneLogs = await DispatchService.fetchLoadedDroneLogs(req.params.droneId);
             const response: BaseResponse<LoadLogDto[]> = {
@@ -70,7 +72,7 @@ class DispatchController {
             }
             return res.status(200).json(response);
         } catch (error) {
-            console.error(`UserController=>getAllFreeDrones ${error}`)
+            console.error(`DispatchController=>fetchLoadedDroneLogs ${error}`)
             const response: BaseResponse<null> = {
               status: 'error',
               data: null,
@@ -80,17 +82,17 @@ class DispatchController {
         }
     }
   
-    public async updateLoadedDroneStatus(req: Request, res: Response) {
+    public async updateLoadedDroneStatus(req: Request, res: Response) : Promise<any> {
         try {
             const loadLogId = req.params.id;
             const updatedDrone = await DispatchService.updateLoadedDroneStatus(loadLogId, req.body);
-            const response: BaseResponse<Drone> = {
-            status: 'success',
-            data: updatedDrone,
+            const response: BaseResponse<LoadLogDto> = {
+                status: 'success',
+                data: updatedDrone,
             }
             return res.status(200).json(response);
         } catch (error: any) {
-            console.error(`UserController=>getDroneById ${error}`)
+            console.error(`DispatchController=>updateLoadedDroneStatus ${error}`)
             const response: BaseResponse<null> = {
                 status: 'error',
                 data: null,
@@ -98,6 +100,27 @@ class DispatchController {
             }
             return res.status(500).json(response);
         }
+    }
+
+    public async checkDroneBatteryLevel(req: Request, res: Response) : Promise<any> {
+
+        try {
+            const batteryLevel = await DispatchService.checkDroneBatteryLevel(req.params.droneId);
+            const response: BaseResponse<any> = {
+                status: 'success',
+                data: {batteryLevel},
+            }
+            return res.status(200).json(response);
+        } catch (error : any) {
+            console.error(`DispatchController=>getDroneById ${error}`)
+            const response: BaseResponse<null> = {
+                status: 'error',
+                data: null,
+                message: `Drone could not be fetched, please try again: ${error?.message}`,
+            }
+            return res.status(500).json(response);
+        }
+        
     }
   
   }

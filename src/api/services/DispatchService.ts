@@ -1,3 +1,4 @@
+import { BatteryState } from "../Enums/BatteryState";
 import { DroneState } from "../Enums/DroneState";
 import { LoadDroneRequest } from "../interfaces/LoadDroneRequest";
 import { Medication } from "../interfaces/Medication";
@@ -53,7 +54,7 @@ class DispatchService {
                 await drone.save();
                 return loadLog;
             }else if(drone && !loadLog){
-                
+                console.log('Creating new load log')
                 interface LoadLogInterface extends LoadDroneRequest {
                     medications: Medication[]
                 }
@@ -62,9 +63,11 @@ class DispatchService {
                     medications : [loadDroneRequest.medication],
                     status : DroneState.LOADING
                 }
+                console.log('About to create log')
                 const medicationLoaded = await LoadLog.create(loadDroneRequestWithMedications)
                 drone.state = DroneState.LOADING;
                 await drone.save();
+                console.log(`Medication loaded ${medicationLoaded}`)
                 return medicationLoaded;
             }
 
@@ -98,7 +101,7 @@ class DispatchService {
                 }
             }else if(updateRequestBody.status === DroneState.RETURNING){
                 if(loadLog.status !== DroneState.DELIVERED){
-                    throw new Error(`Drone items not delivered`)
+                    throw new Error(`Drone items not delivered yet`)
                 }
             }else if(updateRequestBody.status === DroneState.LOADED){
                 if(loadLog.status !== DroneState.LOADING){
@@ -112,13 +115,30 @@ class DispatchService {
             
             loadLog.status = updateRequestBody.status;
             await loadLog.save();
-            Drone.updateOne({ _id: loadLog.droneId }, { state: updateRequestBody.status }).exec();
+            if(updateRequestBody.status === DroneState.LOADED) {
+                Drone.updateOne({ _id: loadLog.droneId }, { state: updateRequestBody.status, lastTimeOfTakeOff: new Date(), batteryStatus : BatteryState.NOTCHARGING }).exec();
+            }else{
+                Drone.updateOne({ _id: loadLog.droneId }, { state: updateRequestBody.status }).exec();
+            }
+            
             return loadLog;
             
         } catch (error: any) {
             console.error(`DispatchService=>updateLoadedDroneStatus ${error}`)
             throw new Error(`${error.message}`)
         }
+    }
+
+    checkDroneBatteryLevel = async (droneId: string) => {
+        
+        try {
+            const drone = await Drone.findById(droneId);
+            return drone?.batteryCapacity;
+        } catch (error: any) {
+            console.error(`DispatchService=>checkDroneBatteryLevel ${error}`)
+            throw new Error(`${error.message}`)
+        }
+        
     }
 }
 
