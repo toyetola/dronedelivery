@@ -14,7 +14,7 @@ The Drone Medication Delivery App API is designed to manage and monitor the deli
   - **Description:** Registers a new drone in the system.
 
 - **Check drone charging status**
-  - **Endpoint:** `/admin/drone/678ced16a3576047b1d5fd2f/charge`
+  - **Endpoint:** `/admin/drone/:droneId/charge`
   - **Method:** GET
   - **Description:** Retrieves the charging status of a specific drone.
 
@@ -26,7 +26,7 @@ The Drone Medication Delivery App API is designed to manage and monitor the deli
   - **Description:** Retrieves a list of all free drones.
 
 - **Get drone details**
-  - **Endpoint:** `/drone/678ced16a3576047b1d5fd2f`
+  - **Endpoint:** `/drone/:droneId`
   - **Method:** GET
   - **Description:** Retrieves details of a specific drone by its ID.
 
@@ -36,17 +36,17 @@ The Drone Medication Delivery App API is designed to manage and monitor the deli
   - **Description:** Loads medications onto a drone.
 
 - **Get every instance when a drone has been loaded**
-  - **Endpoint:** `/drone/678ced16a3576047b1d5fd2f/logs`
+  - **Endpoint:** `/drone/:droneId/logs`
   - **Method:** GET
   - **Description:** Retrieves loaded logs (i.e. each time it has been loaded with items and the items themsleves) for a specific drone.
 
 - **Update load log status**
-  - **Endpoint:** `/loadLog/status/update/678d36c3bebd92e3d9259805`
+  - **Endpoint:** `/loadLog/status/update/:loadLogId`
   - **Method:** PUT
   - **Description:** Updates the status of a loaded drone to DELIVERING, DELIVERED, RETRUNING etc..
 
 - **Check drone battery level**
-  - **Endpoint:** `/drone/678ced16a3576047b1d5fd2f/battery/check`
+  - **Endpoint:** `/drone/:droneId/battery/check`
   - **Method:** GET
   - **Description:** Checks the battery level of a specific drone.
 
@@ -95,6 +95,10 @@ Ensure the mongod server is running on your computer
 mongod
 ```
 Start the application:
+
+```
+npm run build
+```
 ```
 npm start
 ```
@@ -102,6 +106,7 @@ Running Tests
 ```
 npm test
 ```
+All test present in the codebase should pass
 
 ### Running in a container
 1. Run
@@ -127,7 +132,7 @@ https://documenter.getpostman.com/view/3707157/2sAYQcEqCX
 
 ## Further Consideration
 
-Authentication middlewares can be created to authenticate and authorize different categories users interacting with the system. This was not implemented for time. However the structure of the codebase already started to cater for this in that we have AdminController and UserController.
+Authentication middlewares can be created to authenticate and authorize different categories of users interacting with the system. This was not implemented for time. However the structure of the codebase already started to cater for this in that we have AdminController and UserController.
 
 ## Needed Data
 Some drone data will already be seeded for you once the database connection is extablished.
